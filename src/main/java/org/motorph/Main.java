@@ -21,10 +21,11 @@ import java.util.stream.Collectors;
 public class Main {
     private List<Employee> employees = new ArrayList<>();
     private List<Timesheet> timesheets = new ArrayList<>();
+    private static List<Employee> employees = new ArrayList<>();
+    private static List<Timesheet> timesheets = new ArrayList<>();
 
     public static void main(String[] args) {
-        var main = new Main();
-        main.LoadEmployees();
+        LoadEmployees();
 
 
 
@@ -37,7 +38,7 @@ public class Main {
     }
 
     // TODO(ComProg2): refactor to a separate class
-    private void LoadEmployees() {
+    private static void LoadEmployees() {
         var employeeStream = Main.class.getClassLoader().getResourceAsStream("employees.csv");
         if (employeeStream == null) {
             System.out.println("[MotorPH] Could not find employees.csv");

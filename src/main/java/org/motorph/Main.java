@@ -113,9 +113,9 @@ public class Main {
     }
 
     private static void Authenticate() {
-        System.out.println("[MotorPH] Username: ");
+        System.out.print("[MotorPH] Username: ");
         var username = System.console().readLine();
-        System.out.println("[MotorPH] Password: ");
+        System.out.print("[MotorPH] Password: ");
         var password = System.console().readPassword();
 
         if (username == null || password == null) {

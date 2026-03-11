@@ -26,7 +26,6 @@ public class Employee {
         Objects.requireNonNull(employmentStatus);
         Objects.requireNonNull(position);
         Objects.requireNonNull(basicSalary);
-        this.Id = UUID.randomUUID();
         this.EmployeeId = employeeId;
         this.LastName = lastName;
         this.FirstName = firstName;
@@ -42,8 +41,6 @@ public class Employee {
         this.BasicSalary = basicSalary;
     }
 
-    @NotNull
-    public final UUID Id;
     @NotNull
     public final String EmployeeId;
     public String LastName;

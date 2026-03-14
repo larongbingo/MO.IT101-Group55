@@ -33,7 +33,21 @@ public class Main {
         System.out.println("[MotorPH] Welcome " + currentEmployee.FirstName + " " + currentEmployee.LastName);
 
         if (currentEmployee.IsPayrollStaff()) {
-
+            System.out.println("[MotorPH] You are a payroll staff member.");
+            System.out.println("[MotorPH] Process your payroll or select an employee to process payroll.");
+            System.out.print("1 - Your payroll, 2 - Other employees' payroll: ");
+            var option = System.console().readLine();
+            if (option == null) {
+                System.out.println("[MotorPH] No option selected");
+                throw new RuntimeException("[MotorPH] No option selected");
+            } else if (option.equalsIgnoreCase("1")) {
+                ProcessEmployeePayroll(currentEmployee, timesheets);
+            } else if (option.equalsIgnoreCase("2")) {
+                SelectEmployeeForProcessing();
+            } else {
+                System.out.println("[MotorPH] Invalid option selected");
+                throw new RuntimeException("[MotorPH] Invalid option selected");
+            }
         } else {
             SelectTimesheetForProcessing(currentEmployee);
         }
@@ -147,6 +161,46 @@ public class Main {
 
         System.out.println("[MotorPH] Authentication successful");
         currentEmployee = employee.get();
+    }
+
+    private static void SelectEmployeeForProcessing() {
+
+        System.out.println("[MotorPH] Please select an employee to process payroll. Please enter the employee ID or all to process all employees.");
+        System.out.println("[MotorPH] Available employees: all, " + employees.stream().map(x -> x.EmployeeId + " - " + x.FirstName + " " + x.LastName).collect(Collectors.joining(", ")));
+        var employeeId = System.console().readLine();
+        if (employeeId == null) {
+            System.out.println("[MotorPH] No employee selected");
+            throw new RuntimeException("[MotorPH] No employee selected");
+        } else if (employeeId.equalsIgnoreCase("all")) {
+            var groupedByMonth = timesheets.stream().collect(Collectors.groupingBy(x -> x.StartTime.getMonth() + " " + x.StartTime.getYear()));
+            System.out.println("[MotorPH] Select a month to process payroll for all employees: " + groupedByMonth.keySet());
+            var month = System.console().readLine();
+            if (month == null) {
+                System.out.println("[MotorPH] No month selected");
+                throw new RuntimeException("[MotorPH] No month selected");
+            }
+            var monthTimesheet = groupedByMonth.get(month.toUpperCase());
+            if (monthTimesheet == null) {
+                System.out.println("[MotorPH] No timesheet data for month " + month);
+                throw new RuntimeException("[MotorPH] No timesheet data for month " + month);
+            }
+
+            for (var employee : employees) {
+                var employeeTimesheet = monthTimesheet.stream().filter(x -> x.EmployeeId.equals(employee.EmployeeId)).toList();
+                System.out.println("[MotorPH] Processing payroll for " + employee.FirstName + " " + employee.LastName + " - " + employee.Position);
+                ProcessEmployeePayroll(employee, employeeTimesheet);
+            }
+        }
+        else {
+            var employee = employees.stream().filter(x -> x.EmployeeId.equals(employeeId)).findFirst();
+            if (employee.isEmpty()) {
+                System.out.println("[MotorPH] Invalid employee selected");
+                throw new RuntimeException("[MotorPH] Invalid employee selected");
+            }
+            System.out.println("[MotorPH] Processing payroll for " + employee.get().FirstName + " " + employee.get().LastName + " - " + employee.get().Position);
+            SelectTimesheetForProcessing(employee.get());
+        }
+
     }
 
     private static void SelectTimesheetForProcessing(Employee employee) {

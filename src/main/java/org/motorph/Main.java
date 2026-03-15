@@ -51,16 +51,6 @@ public class Main {
         } else {
             SelectTimesheetForProcessing(currentEmployee);
         }
-
-        // Needed Presentations
-        // 1. Login
-        // 2. Current Employee Display
-        // 3.1. Current Employee only (default access)
-        // 3.2. Process Payroll Selection (elevated access/staff)
-            // 1. One Employee
-                // 1. All Months
-                // 1. One Month
-            // 2. All Employees - One Month
     }
 
     // TODO(ComProg2): refactor to a separate class

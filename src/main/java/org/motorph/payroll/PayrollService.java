@@ -92,4 +92,29 @@ public class PayrollService {
         else if (income < 24750) return 1102.50;
         else return 1125.00;
     }
+    
+    public String generatePaySlip(Employee employee, List<Timesheet> timesheets) {
+        var totalHours = countTotalWorkHours(timesheets);
+        var grossPay = calculateGrossPay(employee, timesheets);
+        var sss = calculateSSSContribution(grossPay);
+        var philHealth = calculatePhilHealthContribution(grossPay);
+        var pagIbig = calculatePagIbigContribution(grossPay);
+        var totalDeductions = sss + philHealth + pagIbig;
+        var taxableIncome = grossPay - totalDeductions;
+        var tax = calculateTax(taxableIncome);
+        var netPay = taxableIncome - tax;
+
+        var sb = new StringBuilder();
+        sb.append("[MotorPH] === " + timesheets.getFirst().StartTime.getMonth() + " " + timesheets.getFirst().StartTime.getYear() + "\n");
+        sb.append("[MotorPH] Total Hours Worked: " + totalHours + "\n");
+        sb.append("[MotorPH] Gross Pay: Php " + grossPay + "\n");
+        sb.append("[MotorPH] SSS Contribution: Php " + sss + "\n");
+        sb.append("[MotorPH] PhilHealth Contribution: Php " + philHealth + "\n");
+        sb.append("[MotorPH] Pag-Ibig Contribution: Php " + pagIbig + "\n");
+        sb.append("[MotorPH] Total Deductions: Php " + totalDeductions + "\n");
+        sb.append("[MotorPH] Taxable Income: Php " + taxableIncome + "\n");
+        sb.append("[MotorPH] Tax: Php " + tax + "\n");
+        sb.append("[MotorPH] Net Pay: Php " + netPay + "\n");
+        return sb.toString();
+    }
 }

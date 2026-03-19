@@ -1,11 +1,26 @@
 package org.motorph.timesheet;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
-import java.util.UUID;
+import java.util.Locale;
 
 public interface TimesheetRepository {
-    List<Timesheet> GetAllTimesheetsByEmployeeIdAndDateRange(UUID employeeId, LocalDateTime startDate, LocalDateTime endDate);
-    Boolean AddTimesheet(Timesheet newTimesheet);
-    Boolean UpdateTimesheet(Timesheet timesheetToBeUpdated);
+    List<Timesheet> getAllTimesheetsByEmployeeIdAndDateRange(String employeeId, LocalDateTime startDate, LocalDateTime endDate);
+    List<Timesheet> getAllTimesheetsByEmployeeId(String employeeId);
+    List<String> getAllAvailableMonths();
+    List<String> getAllAvailableMonthsByEmployeeId(String employeeId);
+    default List<Timesheet> getAllTimesheetsByEmployeeIdAndAvailableMonthString(String employeeId, String month) {
+        var formatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("MMMM yyyy")
+                .toFormatter(Locale.ENGLISH);
+        var date = YearMonth.parse(month.trim(), formatter);
+        var firstDay = date.atDay(1).atStartOfDay();
+        var lastDay = date.atEndOfMonth();
+        return getAllTimesheetsByEmployeeIdAndDateRange(employeeId, firstDay, lastDay.atStartOfDay());
+    }
 }

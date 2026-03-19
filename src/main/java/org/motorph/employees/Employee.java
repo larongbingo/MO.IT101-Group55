@@ -2,8 +2,6 @@ package org.motorph.employees;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
@@ -59,6 +57,14 @@ public class Employee {
     public UUID SupervisorId;
 
     public double BasicSalary;
+
+    public String getFullName() {
+        return FirstName + " " + LastName;
+    }
+
+    public String getBasicDetails() {
+        return EmployeeId + "," + getFullName() + "," + Position;
+    }
 
     @NotNull
     public double getGrossSemiMonthlySalaryRate() {

@@ -162,12 +162,14 @@ public class ConsolePayroll {
             }
         }
         else if (employees.stream().anyMatch(x -> x.EmployeeId.equals(employeeId))) {
-            for (var employee : employees) {
-                var timesheets = this.timesheetRepository.getAllTimesheetsByEmployeeId(employee.EmployeeId);
-                var payroll = payrollService.generatePaySlip(employee, timesheets);
-                System.out.println("Payroll for " + employee.getBasicDetails());
-                System.out.println(payroll);
-            }
+            var selectedEmployee = employees.stream()
+                    .filter(x -> x.EmployeeId.equals(employeeId))
+                    .findFirst()
+                    .orElse(null);
+            var timesheets = this.timesheetRepository.getAllTimesheetsByEmployeeId(selectedEmployee.EmployeeId);
+            var payroll = payrollService.generatePaySlip(selectedEmployee, timesheets);
+            System.out.println("Payroll for " + selectedEmployee.getBasicDetails());
+            System.out.println(payroll);
         }
         else {
             System.out.println("[MotorPH] Invalid employee selected");

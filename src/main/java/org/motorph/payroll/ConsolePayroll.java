@@ -1,24 +1,11 @@
 package org.motorph.payroll;
 
-import de.siegmar.fastcsv.reader.CsvReader;
-import org.motorph.Main;
 import org.motorph.employees.*;
 import org.motorph.payroll.repositories.ListEmployeeRepository;
 import org.motorph.payroll.repositories.ListLoginRepository;
 import org.motorph.payroll.repositories.ListTimesheetRepository;
-import org.motorph.timesheet.Timesheet;
 import org.motorph.timesheet.TimesheetRepository;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class ConsolePayroll {

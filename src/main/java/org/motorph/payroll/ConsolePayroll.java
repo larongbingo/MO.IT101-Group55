@@ -13,7 +13,6 @@ public class ConsolePayroll {
     private LoginRepository loginRepository;
     private TimesheetRepository timesheetRepository;
     private PayrollService payrollService;
-    private Employee currentEmployee;
 
     public ConsolePayroll() {
         var dataLoader = new LoadData();
@@ -27,17 +26,17 @@ public class ConsolePayroll {
     }
 
     public void Start() {
-        this.currentEmployee = AuthenticateProcedure();
+        Employee currentEmployee = AuthenticateProcedure();
 
-        if (this.currentEmployee.IsPayrollStaff()) {
+        if (currentEmployee.IsPayrollStaff()) {
             System.out.println("[MOTORPH] You are a payroll staff member.");
             if (QuestionAboutPayrollProcess()) {
-                NormalAccessProcedure(this.currentEmployee);
+                NormalAccessProcedure(currentEmployee);
             } else {
                 PayrollAccessProcedure();
             }
         } else {
-            NormalAccessProcedure(this.currentEmployee);
+            NormalAccessProcedure(currentEmployee);
         }
     }
 

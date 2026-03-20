@@ -1,9 +1,6 @@
 package org.motorph.payroll;
 
 import org.motorph.employees.*;
-import org.motorph.payroll.repositories.ListEmployeeRepository;
-import org.motorph.payroll.repositories.ListLoginRepository;
-import org.motorph.payroll.repositories.ListTimesheetRepository;
 import org.motorph.timesheet.TimesheetRepository;
 
 import java.util.stream.Collectors;
@@ -26,21 +23,21 @@ public class ConsolePayroll {
     }
 
     public void Start() {
-        Employee currentEmployee = AuthenticateProcedure();
+        Employee currentEmployee = authenticateProcedure();
 
         if (currentEmployee.IsPayrollStaff()) {
             System.out.println("[MOTORPH] You are a payroll staff member.");
-            if (QuestionAboutPayrollProcess()) {
-                NormalAccessProcedure(currentEmployee);
+            if (questionAboutPayrollProcess()) {
+                normalAccessProcedure(currentEmployee);
             } else {
-                PayrollAccessProcedure();
+                payrollAccessProcedure();
             }
         } else {
-            NormalAccessProcedure(currentEmployee);
+            normalAccessProcedure(currentEmployee);
         }
     }
 
-    private Employee AuthenticateProcedure() {
+    private Employee authenticateProcedure() {
         System.out.print("[MOTORPH] Enter your username: ");
         var username = System.console().readLine();
         System.out.print("[MOTORPH] Enter your password: ");
@@ -55,7 +52,7 @@ public class ConsolePayroll {
         return employee;
     }
 
-    private boolean QuestionAboutPayrollProcess() {
+    private boolean questionAboutPayrollProcess() {
         System.out.println("[MotorPH] Process your payroll or select an employee to process payroll.");
         System.out.print("1 - Your payroll, 2 - Other employees' payroll: ");
         var option = System.console().readLine();
@@ -77,7 +74,7 @@ public class ConsolePayroll {
         }
     }
 
-    private void NormalAccessProcedure(Employee employee) {
+    private void normalAccessProcedure(Employee employee) {
         var availableMonths = timesheetRepository.getAllAvailableMonthsByEmployeeId(employee.EmployeeId);
 
         if (availableMonths.isEmpty()) {
@@ -112,7 +109,7 @@ public class ConsolePayroll {
 
     }
 
-    private void PayrollAccessProcedure() {
+    private void payrollAccessProcedure() {
         var employees = this.employeeRepository.getAllEmployees();
         System.out.println("[MotorPH] Please select an employee to process payroll."
                 + " Please enter the employee ID or all to process all employees.");

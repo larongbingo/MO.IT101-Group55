@@ -130,7 +130,8 @@ public class ConsolePayroll {
 
     private void PayrollAccessProcedure() {
         var employees = this.employeeRepository.getAllEmployees();
-        System.out.println("[MotorPH] Please select an employee to process payroll. Please enter the employee ID or all to process all employees.");
+        System.out.println("[MotorPH] Please select an employee to process payroll."
+                + " Please enter the employee ID or all to process all employees.");
         System.out.println("[MotorPH] Available employees: all\n " + employees.stream()
                 .map(x -> x.getBasicDetails())
                 .collect(Collectors.joining("\n")));
@@ -150,7 +151,8 @@ public class ConsolePayroll {
             }
             else if (months.contains(month.toUpperCase())) {
                 for (var employee : employees) {
-                    var timesheets = this.timesheetRepository.getAllTimesheetsByEmployeeIdAndAvailableMonthString(employee.EmployeeId, month);
+                    var timesheets = this.timesheetRepository
+                            .getAllTimesheetsByEmployeeIdAndAvailableMonthString(employee.EmployeeId, month);
                     var payroll = payrollService.generatePaySlip(employee, timesheets);
                     System.out.println("Payroll for " + employee.getBasicDetails());
                     System.out.println(payroll);
@@ -251,8 +253,10 @@ public class ConsolePayroll {
         attendanceCsv.stream().forEach(x -> {
             var timesheet = new Timesheet(
                     x.getField("Employee #"),
-                    LocalDateTime.parse(x.getField("Date") + " " + x.getField("Log In"), DateTimeFormatter.ofPattern("MM/dd/yyyy H:mm")),
-                    LocalDateTime.parse(x.getField("Date") + " " + x.getField("Log Out"), DateTimeFormatter.ofPattern("MM/dd/yyyy H:mm"))
+                    LocalDateTime.parse(x.getField("Date") + " " + x.getField("Log In"),
+                            DateTimeFormatter.ofPattern("MM/dd/yyyy H:mm")),
+                    LocalDateTime.parse(x.getField("Date") + " " + x.getField("Log Out"),
+                            DateTimeFormatter.ofPattern("MM/dd/yyyy H:mm"))
             );
             timesheets.add(timesheet);
         });

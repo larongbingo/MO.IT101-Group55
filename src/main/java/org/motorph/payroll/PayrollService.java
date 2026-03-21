@@ -7,11 +7,7 @@ import java.util.List;
 
 public class PayrollService {
     public double countTotalWorkHours(List<Timesheet> timesheets) {
-        double totalHours = 0.0;
-        for (Timesheet timesheet : timesheets) {
-            totalHours += timesheet.getTotalHours();
-        }
-        return totalHours;
+        return timesheets.stream().map(Timesheet::getTotalHours).reduce(0.0, Double::sum);
     }
 
     public double calculateGrossPay(Employee employee, List<Timesheet> timesheets) {

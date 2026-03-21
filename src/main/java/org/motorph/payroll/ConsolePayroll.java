@@ -92,15 +92,13 @@ public class ConsolePayroll {
             for (var month : availableMonths) {
                 var timesheets = this.timesheetRepository
                         .getAllTimesheetsByEmployeeIdAndMonth(employee.EmployeeId, month);
-                var payroll = payrollService.generatePaySlip(employee, timesheets);
-                System.out.println(payroll);
+                generateAndPrintPayroll(employee, timesheets);
             }
         }
         else if (availableMonths.contains(selectedMonth.toUpperCase())) {
             var timesheets = this.timesheetRepository
                     .getAllTimesheetsByEmployeeIdAndMonth(employee.EmployeeId, selectedMonth);
-            var payroll = payrollService.generatePaySlip(employee, timesheets);
-            System.out.println(payroll);
+            generateAndPrintPayroll(employee, timesheets);
         }
         else {
             System.out.println("[MotorPH] Invalid month selected");
@@ -134,9 +132,7 @@ public class ConsolePayroll {
                 for (var employee : employees) {
                     var timesheets = this.timesheetRepository
                             .getAllTimesheetsByEmployeeIdAndMonth(employee.EmployeeId, month);
-                    var payroll = payrollService.generatePaySlip(employee, timesheets);
-                    System.out.println("Payroll for " + employee.getBasicDetails());
-                    System.out.println(payroll);
+                    generateAndPrintPayroll(employee, timesheets);
                 }
             }
             else {
@@ -150,13 +146,18 @@ public class ConsolePayroll {
                     .findFirst()
                     .orElse(null);
             var timesheets = this.timesheetRepository.getAllTimesheetsByEmployeeId(selectedEmployee.EmployeeId);
-            var payroll = payrollService.generatePaySlip(selectedEmployee, timesheets);
-            System.out.println("Payroll for " + selectedEmployee.getBasicDetails());
-            System.out.println(payroll);
+            generateAndPrintPayroll(selectedEmployee, timesheets);
         }
         else {
             System.out.println("[MotorPH] Invalid employee selected");
             throw new RuntimeException("[MotorPH] Invalid employee selected");
         }
+    }
+
+    /// Generates and prints payroll for an employee
+    private void generateAndPrintPayroll(Employee employee, List<Timesheet> timesheets) {
+        var payroll = payrollService.generatePaySlip(employee, timesheets);
+        System.out.println("Payroll for " + employee.getBasicDetails());
+        System.out.println(payroll);
     }
 }

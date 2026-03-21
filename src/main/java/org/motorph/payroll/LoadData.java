@@ -1,7 +1,6 @@
 package org.motorph.payroll;
 
 import de.siegmar.fastcsv.reader.CsvReader;
-import org.motorph.Main;
 import org.motorph.employees.Employee;
 import org.motorph.employees.EmploymentStatus;
 import org.motorph.employees.Login;
@@ -31,7 +30,7 @@ public class LoadData {
     }
 
     /// Parses the employee and login data
-    public EmployeeLogin LoadEmployees() throws RuntimeException {
+    public EmployeeLogin loadEmployees() throws RuntimeException {
         List<Employee> employees = new ArrayList<>();
         List<Login> logins = new ArrayList<>();
 
@@ -86,7 +85,7 @@ public class LoadData {
     }
 
     /// Parses the attendance data
-    public List<Timesheet> LoadTimesheets() throws RuntimeException {
+    public List<Timesheet> loadTimesheets() throws RuntimeException {
         List<Timesheet> timesheets = new ArrayList<>();
 
         var attendanceReader = new BufferedReader(new InputStreamReader(attendanceStream));

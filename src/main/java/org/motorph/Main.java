@@ -20,8 +20,8 @@ public class Main {
         }
 
         var dataLoader = new LoadData(employeeStream, attendanceStream);
-        var employeeLogin = dataLoader.LoadEmployees();
-        var timesheets = dataLoader.LoadTimesheets();
+        var employeeLogin = dataLoader.loadEmployees();
+        var timesheets = dataLoader.loadTimesheets();
 
         var employeeRepository = new ListEmployeeRepository(employeeLogin.employees());
         var loginRepository = new ListLoginRepository(employeeLogin.logins(), employeeRepository);

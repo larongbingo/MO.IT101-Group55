@@ -16,17 +16,32 @@ public class ConsolePayroll {
     private final LoginRepository loginRepository;
     private final TimesheetRepository timesheetRepository;
     private final PayrollService payrollService;
-    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private final BufferedReader reader;
+
+    /// Constructor to build ConsolePayroll with the default reader
+    public ConsolePayroll(EmployeeRepository employeeRepository,
+                          LoginRepository loginRepository,
+                          TimesheetRepository timesheetRepository,
+                          PayrollService payrollService){
+        this(
+                employeeRepository,
+                loginRepository,
+                timesheetRepository,
+                payrollService,
+                new BufferedReader(new InputStreamReader(System.in))
+        );
+    }
 
     public ConsolePayroll(EmployeeRepository employeeRepository,
                           LoginRepository loginRepository,
                           TimesheetRepository timesheetRepository,
-                          PayrollService payrollService) {
-
+                          PayrollService payrollService,
+                          BufferedReader reader) {
         this.employeeRepository = employeeRepository;
         this.loginRepository = loginRepository;
         this.timesheetRepository = timesheetRepository;
         this.payrollService = payrollService;
+        this.reader = reader;
     }
 
     /// Entry point to start the payroll operations

@@ -7,7 +7,11 @@ import org.motorph.timesheet.TimesheetRepository;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /// Presentation and Business Rules to handle payroll operations
@@ -60,19 +64,6 @@ public class ConsolePayroll {
         }
     }
 
-    private String readLineOrThrow(String errorMessage) {
-        try {
-            var value = reader.readLine();
-            if (value == null) {
-                System.out.println(errorMessage);
-                throw new RuntimeException(errorMessage);
-            }
-            return value;
-        } catch (IOException e) {
-            throw new RuntimeException("[MOTORPH] Failed to read input", e);
-        }
-    }
-
     /// Asks the user to provide a username and password to authenticate
     private Employee authenticateProcedure() {
         System.out.print("[MOTORPH] Enter your username: ");
@@ -119,19 +110,23 @@ public class ConsolePayroll {
             throw new RuntimeException("[MotorPH] No available months to process payroll");
         }
 
+        var range = selectMonthlyOrCutoff();
+
         System.out.println("[MotorPH] Available months: all, " + availableMonths);
         var selectedMonth = readLineOrThrow("[MotorPH] No month selected");
 
         if (selectedMonth.equalsIgnoreCase("all")) {
             for (var month : availableMonths) {
-                var timesheets = this.timesheetRepository
-                        .getAllTimesheetsByEmployeeIdAndMonth(employee.EmployeeId, month);
+                var timesheets = getTimesheetsByEmployeeAndRange(employee, range, month);
                 generateAndPrintPayroll(employee, timesheets);
             }
         } else if (availableMonths.contains(selectedMonth.toUpperCase())) {
-            var timesheets = this.timesheetRepository
-                    .getAllTimesheetsByEmployeeIdAndMonth(employee.EmployeeId, selectedMonth);
-            System.out.println(timesheets.stream().map(x -> x.StartTime.toString()).collect(Collectors.joining("\n")));
+            var timesheets = getTimesheetsByEmployeeAndRange(employee, range, selectedMonth);
+            System.out.println(
+                    timesheets.stream()
+                            .map(x -> x.StartTime.toString())
+                            .collect(Collectors.joining("\n"))
+            );
             generateAndPrintPayroll(employee, timesheets);
         } else {
             System.out.println("[MotorPH] Invalid month selected");
@@ -142,6 +137,7 @@ public class ConsolePayroll {
     /// Access for the payroll team.
     /// Allows the payroll team to process payroll for all employees or a specific employee.
     private void payrollAccessProcedure() {
+        // Ideally, this would be a paginated
         var employees = this.employeeRepository.getAllEmployees();
         System.out.println("[MotorPH] Please select an employee to process payroll."
                 + " Please enter the employee ID or all to process all employees.");
@@ -152,14 +148,15 @@ public class ConsolePayroll {
         var employeeId = readLineOrThrow("[MotorPH] No employee selected");
 
         if (employeeId.equalsIgnoreCase("all")) {
+            var range = selectMonthlyOrCutoff();
+
             var months = this.timesheetRepository.getAllAvailableMonths();
             System.out.println("[MOTORPH] Select month to process payroll for all employees: " + months);
-
             var month = readLineOrThrow("[MotorPH] No month selected");
+
             if (months.contains(month.toUpperCase())) {
                 for (var employee : employees) {
-                    var timesheets = this.timesheetRepository
-                            .getAllTimesheetsByEmployeeIdAndMonth(employee.EmployeeId, month);
+                    var timesheets = getTimesheetsByEmployeeAndRange(employee, range, month);
                     generateAndPrintPayroll(employee, timesheets);
                 }
             } else {
@@ -171,12 +168,34 @@ public class ConsolePayroll {
                     .filter(x -> x.EmployeeId.equals(employeeId))
                     .findFirst()
                     .orElse(null);
-            var timesheets = this.timesheetRepository.getAllTimesheetsByEmployeeId(selectedEmployee.EmployeeId);
-            generateAndPrintPayroll(selectedEmployee, timesheets);
+            normalAccessProcedure(selectedEmployee);
         } else {
             System.out.println("[MotorPH] Invalid employee selected");
             throw new RuntimeException("[MotorPH] Invalid employee selected");
         }
+    }
+
+    /// Asks the user to select monthly or cutoff
+    private ProcessRange selectMonthlyOrCutoff() {
+        System.out.println("[MotorPH] Select monthly or cutoff {1 - month, 2 - first cutoff, 3 - second cutoff}: ");
+        var selection = readLineOrThrow("[MotorPH] No selection made");
+        if (selection.equalsIgnoreCase("1")) {
+            return ProcessRange.MONTH;
+        } else if (selection.equalsIgnoreCase("2")) {
+            return ProcessRange.FIRST_CUTOFF;
+        } else if (selection.equalsIgnoreCase("3")) {
+            return ProcessRange.SECOND_CUTOFF;
+        } else {
+            System.out.println("[MotorPH] Invalid selection");
+            throw new RuntimeException("[MotorPH] Invalid selection");
+        }
+    }
+
+    /// Gets timesheets based on the month and range
+    private List<Timesheet> getTimesheetsByEmployeeAndRange(Employee employee, ProcessRange range, String month) {
+        var dateRange = DateRange.parseYearMonthInRange(month, range);
+        return this.timesheetRepository
+                .getAllTimesheetsByEmployeeIdAndDateRange(employee.EmployeeId, dateRange.start(), dateRange.end());
     }
 
     /// Generates and prints payroll for an employee
@@ -185,4 +204,48 @@ public class ConsolePayroll {
         System.out.println("Payroll for " + employee.getBasicDetails());
         System.out.println(payroll);
     }
+
+    /// Reads a line from the console and throws an exception if the input is null
+    private String readLineOrThrow(String errorMessage) {
+        try {
+            var value = reader.readLine();
+            if (value == null) {
+                System.out.println(errorMessage);
+                throw new RuntimeException(errorMessage);
+            }
+            return value;
+        } catch (IOException e) {
+            throw new RuntimeException("[MOTORPH] Failed to read input", e);
+        }
+    }
+}
+
+record DateRange(LocalDateTime start, LocalDateTime end) {
+    /// Parses a Year Month String that follows the given ProcessRange
+    /// if MONTH then first day of the month to last day of the month (the whole month)
+    /// if FIRST_CUTOFF then first day of the month to the 15th
+    /// if SECOND_CUTOFF then 16th to last day of the month
+    public static DateRange parseYearMonthInRange(String month, ProcessRange rangeType) {
+        var formatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("MMMM yyyy")
+                .toFormatter(Locale.ENGLISH);
+        var date = YearMonth.parse(month.trim(), formatter);
+
+        return switch (rangeType) {
+            case MONTH -> new DateRange(date.atDay(1).atStartOfDay(), date.atEndOfMonth().atStartOfDay());
+            case FIRST_CUTOFF
+                    -> new DateRange(date.atDay(1).atStartOfDay(), date.atDay(15).atStartOfDay());
+            case SECOND_CUTOFF
+                    -> new DateRange(date.atDay(16).atStartOfDay(), date.atEndOfMonth().atStartOfDay());
+        };
+    }
+}
+enum ProcessRange {
+    /// Whole month
+    MONTH,
+    /// First day of the month to 15th
+    FIRST_CUTOFF,
+    /// 16th to last day of the month
+    SECOND_CUTOFF
 }

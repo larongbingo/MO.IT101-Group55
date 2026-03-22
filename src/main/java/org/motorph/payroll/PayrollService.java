@@ -107,7 +107,7 @@ public class PayrollService {
         var lastDate = timesheets.getLast().EndTime.format(formatter);
 
         var sb = new StringBuilder();
-        sb.append("[MotorPH] ===" + firstDate + " - " + lastDate + "\n");
+        sb.append("[MotorPH] === " + firstDate + " - " + lastDate + "\n");
         sb.append("[MotorPH] Total Hours Worked: " + totalHours + "\n");
         sb.append("[MotorPH] Gross Pay: Php " + grossPay + "\n");
         sb.append("[MotorPH] SSS Contribution: Php " + sss + "\n");

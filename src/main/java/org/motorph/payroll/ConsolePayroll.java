@@ -4,6 +4,9 @@ import org.motorph.employees.*;
 import org.motorph.timesheet.Timesheet;
 import org.motorph.timesheet.TimesheetRepository;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +16,7 @@ public class ConsolePayroll {
     private final LoginRepository loginRepository;
     private final TimesheetRepository timesheetRepository;
     private final PayrollService payrollService;
+    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public ConsolePayroll(EmployeeRepository employeeRepository,
                           LoginRepository loginRepository,
@@ -41,14 +45,28 @@ public class ConsolePayroll {
         }
     }
 
+    private String readLineOrThrow(String errorMessage) {
+        try {
+            var value = reader.readLine();
+            if (value == null) {
+                System.out.println(errorMessage);
+                throw new RuntimeException(errorMessage);
+            }
+            return value;
+        } catch (IOException e) {
+            throw new RuntimeException("[MOTORPH] Failed to read input", e);
+        }
+    }
+
     /// Asks the user to provide a username and password to authenticate
     private Employee authenticateProcedure() {
         System.out.print("[MOTORPH] Enter your username: ");
-        var username = System.console().readLine();
-        System.out.print("[MOTORPH] Enter your password: ");
-        var password = System.console().readPassword();
+        var username = readLineOrThrow("[MOTORPH] No username entered");
 
-        var employee = this.loginRepository.getEmployeeByCredentials(username, new String(password));
+        System.out.print("[MOTORPH] Enter your password: ");
+        var password = readLineOrThrow("[MOTORPH] No password entered");
+
+        var employee = this.loginRepository.getEmployeeByCredentials(username, password);
         if (employee == null) {
             System.out.println("[MOTORPH] Invalid username or password");
             throw new RuntimeException("[MOTORPH] Invalid username or password");
@@ -61,12 +79,8 @@ public class ConsolePayroll {
     private boolean questionAboutPayrollProcess() {
         System.out.println("[MotorPH] Process your payroll or select an employee to process payroll.");
         System.out.print("1 - Your payroll, 2 - Other employees' payroll: ");
-        var option = System.console().readLine();
+        var option = readLineOrThrow("[MotorPH] No option selected");
         switch (option) {
-            case null -> {
-                System.out.println("[MotorPH] No option selected");
-                throw new RuntimeException("[MotorPH] No option selected");
-            }
             case "1" -> {
                 return true;
             }
@@ -91,28 +105,23 @@ public class ConsolePayroll {
         }
 
         System.out.println("[MotorPH] Available months: all, " + availableMonths);
-        var selectedMonth = System.console().readLine();
-        if (selectedMonth == null) {
-            System.out.println("[MotorPH] No month selected");
-            throw new RuntimeException("[MotorPH] No month selected");
-        }
-        else if (selectedMonth.equalsIgnoreCase("all")) {
+        var selectedMonth = readLineOrThrow("[MotorPH] No month selected");
+
+        if (selectedMonth.equalsIgnoreCase("all")) {
             for (var month : availableMonths) {
                 var timesheets = this.timesheetRepository
                         .getAllTimesheetsByEmployeeIdAndMonth(employee.EmployeeId, month);
                 generateAndPrintPayroll(employee, timesheets);
             }
-        }
-        else if (availableMonths.contains(selectedMonth.toUpperCase())) {
+        } else if (availableMonths.contains(selectedMonth.toUpperCase())) {
             var timesheets = this.timesheetRepository
                     .getAllTimesheetsByEmployeeIdAndMonth(employee.EmployeeId, selectedMonth);
+            System.out.println(timesheets.stream().map(x -> x.StartTime.toString()).collect(Collectors.joining("\n")));
             generateAndPrintPayroll(employee, timesheets);
-        }
-        else {
+        } else {
             System.out.println("[MotorPH] Invalid month selected");
             throw new RuntimeException("[MotorPH] Invalid month selected");
         }
-
     }
 
     /// Access for the payroll team.
@@ -124,41 +133,32 @@ public class ConsolePayroll {
         System.out.println("[MotorPH] Available employees: all\n " + employees.stream()
                 .map(x -> x.getBasicDetails())
                 .collect(Collectors.joining("\n")));
-        var employeeId = System.console().readLine();
-        if (employeeId == null) {
-            System.out.println("[MotorPH] No employee selected");
-            throw new RuntimeException("[MotorPH] No employee selected");
-        }
-        else if (employeeId.equalsIgnoreCase("all")) {
+
+        var employeeId = readLineOrThrow("[MotorPH] No employee selected");
+
+        if (employeeId.equalsIgnoreCase("all")) {
             var months = this.timesheetRepository.getAllAvailableMonths();
             System.out.println("[MOTORPH] Select month to process payroll for all employees: " + months);
 
-            var month = System.console().readLine();
-            if (month == null) {
-                System.out.println("[MotorPH] No month selected");
-                throw new RuntimeException("[MotorPH] No month selected");
-            }
-            else if (months.contains(month.toUpperCase())) {
+            var month = readLineOrThrow("[MotorPH] No month selected");
+            if (months.contains(month.toUpperCase())) {
                 for (var employee : employees) {
                     var timesheets = this.timesheetRepository
                             .getAllTimesheetsByEmployeeIdAndMonth(employee.EmployeeId, month);
                     generateAndPrintPayroll(employee, timesheets);
                 }
-            }
-            else {
+            } else {
                 System.out.println("[MotorPH] Invalid month selected");
                 throw new RuntimeException("[MotorPH] Invalid month selected");
             }
-        }
-        else if (employees.stream().anyMatch(x -> x.EmployeeId.equals(employeeId))) {
+        } else if (employees.stream().anyMatch(x -> x.EmployeeId.equals(employeeId))) {
             var selectedEmployee = employees.stream()
                     .filter(x -> x.EmployeeId.equals(employeeId))
                     .findFirst()
                     .orElse(null);
             var timesheets = this.timesheetRepository.getAllTimesheetsByEmployeeId(selectedEmployee.EmployeeId);
             generateAndPrintPayroll(selectedEmployee, timesheets);
-        }
-        else {
+        } else {
             System.out.println("[MotorPH] Invalid employee selected");
             throw new RuntimeException("[MotorPH] Invalid employee selected");
         }

@@ -35,7 +35,7 @@ public class PayrollService {
 
     public double calculatePhilHealthContribution(double income) {
         if (income <= 10000) return (double) 300 / 2;
-        else if (income < 60000) return Math.max(1800 / 2.0, (income * 0.03) / 2);
+        else if (income < 60000) return (income * 0.03) / 2;
         else return 1800 / 2.0;
     }
 

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /// Unit Tests based on the example data shown in the link
 ///
 /// https://docs.google.com/spreadsheets/u/2/d/1mWxdCuYCmTd8n3DrNVxIb912xT8dWFCsQTUc2owv2UQ/copy
-class ConsolePayrollTest {
+class PayrollServiceTest {
     private final PayrollService sut = new PayrollService();
 
     @Test

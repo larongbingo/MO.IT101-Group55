@@ -40,8 +40,8 @@ public class PayrollService {
     }
 
     public double calculatePagIbigContribution(double income) {
-        if (income < 1500) return income * 0.01;
-        else return income * 0.02;
+        var percentage = income < 1500 ? 0.01 : 0.02;
+        return income * percentage > 100 ? 100 : income * percentage;
     }
 
     public double calculateSSSContribution(double income) {

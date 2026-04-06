@@ -73,6 +73,6 @@ public class Employee {
     }
 
     public boolean IsPayrollStaff() {
-        return Position.toLowerCase().contains("org/motorph/payroll");
+        return Position.toLowerCase().contains("payroll");
     }
 }

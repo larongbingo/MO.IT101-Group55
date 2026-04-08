@@ -50,7 +50,7 @@ public class Employee {
 
     public EmploymentStatus EmploymentStatus;
     public String Position;
-    public UUID SupervisorId;
+    public String SupervisorId;
 
     public double BasicSalary;
 

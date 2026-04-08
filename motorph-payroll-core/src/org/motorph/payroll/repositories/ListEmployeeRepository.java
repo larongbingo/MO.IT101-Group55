@@ -20,6 +20,11 @@ public class ListEmployeeRepository implements EmployeeRepository {
         return Result.failure(new MotorPhException("Method not implemented"));
     }
 
+    @Override
+    public Result<Employee> updateEmployee(Employee updatedEmployee) {
+        return Result.failure(new MotorPhException("Method not implemented"));
+    }
+
     /// {@inheritDoc}
     @Override
     public List<Employee> getAllEmployees() {

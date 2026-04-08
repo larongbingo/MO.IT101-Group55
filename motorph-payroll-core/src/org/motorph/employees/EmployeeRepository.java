@@ -7,6 +7,7 @@ import java.util.List;
 /// Common queries for employee data
 public interface EmployeeRepository {
     Result<Employee> addEmployee(Employee newEmployee);
+    Result<Employee> updateEmployee(Employee updatedEmployee);
 
     /// Fetches all employees
     List<Employee> getAllEmployees();

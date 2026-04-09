@@ -1,4 +1,4 @@
-package org.motorph.employees.encryption;
+package org.motorph.employees.crypto;
 
 public interface StringEncryption {
     String Encrypt(String plaintext);

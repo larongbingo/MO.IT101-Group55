@@ -1,5 +1,7 @@
 package org.motorph.repositories;
 
+import org.motorph.core.MotorPhException;
+import org.motorph.core.results.Result;
 import org.motorph.employees.Employee;
 import org.motorph.employees.EmployeeRepository;
 import org.motorph.employees.Login;
@@ -17,6 +19,16 @@ public class ListLoginRepository implements LoginRepository {
         this.employeeRepository = employeeRepository;
     }
 
+    @Override
+    public Result<Login> addLogin(Login login) {
+        return Result.failure(new MotorPhException("Method not implemented"));
+    }
+
+    @Override
+    public Result<Login> updateLogin(Login updatedLogin) {
+        return Result.failure(new MotorPhException("Method not implemented"));
+    }
+
     /// {@inheritDoc}
     @Override
     public Employee getEmployeeByCredentials(String username, String password) {
@@ -31,8 +43,8 @@ public class ListLoginRepository implements LoginRepository {
         return employeeRepository.getEmployeeByEmployeeId(login.EmployeeId);
     }
 
-    /// Fetches a Login data based on the username
-    private Login getLoginByUsername(String username) {
+    /// {@inheritDoc}
+    public Login getLoginByUsername(String username) {
         return logins.stream().filter(x -> x.Username.equals(username)).findFirst().orElse(null);
     }
 }

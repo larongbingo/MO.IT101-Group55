@@ -2,7 +2,7 @@ package org.motorph;
 
 import org.motorph.employees.Employee;
 import org.motorph.employees.EmployeeRepository;
-import org.motorph.employees.LoginRepository;
+import org.motorph.employees.login.LoginRepository;
 import org.motorph.payroll.DateRange;
 import org.motorph.payroll.PayrollService;
 import org.motorph.payroll.ProcessRange;

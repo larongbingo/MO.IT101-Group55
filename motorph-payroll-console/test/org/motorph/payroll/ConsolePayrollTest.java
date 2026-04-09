@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.motorph.ConsolePayroll;
 import org.motorph.employees.*;
+import org.motorph.employees.login.Login;
+import org.motorph.employees.login.LoginRepository;
 import org.motorph.timesheet.TimesheetRepository;
 
 import java.io.BufferedReader;

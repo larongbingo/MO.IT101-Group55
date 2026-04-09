@@ -1,4 +1,4 @@
-package org.motorph.employees;
+package org.motorph.employees.login;
 
 public class Login {
     public Login(String employeeId, String username, String password) {

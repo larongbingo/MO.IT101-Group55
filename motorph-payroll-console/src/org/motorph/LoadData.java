@@ -3,7 +3,7 @@ package org.motorph;
 import de.siegmar.fastcsv.reader.CsvReader;
 import org.motorph.employees.Employee;
 import org.motorph.employees.EmploymentStatus;
-import org.motorph.employees.Login;
+import org.motorph.employees.login.Login;
 import org.motorph.payroll.EmployeeLogin;
 import org.motorph.timesheet.Timesheet;
 

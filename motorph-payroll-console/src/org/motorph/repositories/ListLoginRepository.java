@@ -4,8 +4,8 @@ import org.motorph.core.MotorPhException;
 import org.motorph.core.results.Result;
 import org.motorph.employees.Employee;
 import org.motorph.employees.EmployeeRepository;
-import org.motorph.employees.Login;
-import org.motorph.employees.LoginRepository;
+import org.motorph.employees.login.Login;
+import org.motorph.employees.login.LoginRepository;
 
 import java.util.List;
 

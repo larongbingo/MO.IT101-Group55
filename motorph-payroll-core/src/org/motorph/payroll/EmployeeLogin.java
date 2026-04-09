@@ -1,7 +1,7 @@
 package org.motorph.payroll;
 
 import org.motorph.employees.Employee;
-import org.motorph.employees.Login;
+import org.motorph.employees.login.Login;
 
 import java.util.List;
 

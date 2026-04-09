@@ -1,6 +1,7 @@
-package org.motorph.employees;
+package org.motorph.employees.login;
 
 import org.motorph.core.results.Result;
+import org.motorph.employees.Employee;
 
 /// Common queries for employee login data
 public interface LoginRepository {

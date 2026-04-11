@@ -51,31 +51,9 @@ public final class ManageEmployeesServiceImpl implements ManageEmployeesService 
             return Result.failure(new MotorPhException("UpdateEmployee DTO is null"));
         }
 
-        if (updateEmployee.LastName() != null)
-            employeeToUpdate.LastName = updateEmployee.LastName();
-        if (updateEmployee.FirstName() != null)
-            employeeToUpdate.FirstName = updateEmployee.FirstName();
-        if (updateEmployee.Birthday() != null)
-            employeeToUpdate.Birthday =
-                    LocalDate.parse(updateEmployee.Birthday(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        if (updateEmployee.Address() != null)
-            employeeToUpdate.Address = updateEmployee.Address();
-        if (updateEmployee.PhoneNumber() != null)
-            employeeToUpdate.PhoneNumber = updateEmployee.PhoneNumber();
-        if (updateEmployee.SSSNumber() != null)
-            employeeToUpdate.SSSNumber = updateEmployee.SSSNumber();
-        if (updateEmployee.PhilHealthNumber() != null)
-            employeeToUpdate.PhilHealthNumber = updateEmployee.PhilHealthNumber();
-        if (updateEmployee.TaxIdNumber() != null)
-            employeeToUpdate.TaxIdNumber = updateEmployee.TaxIdNumber();
-        if (updateEmployee.PagibigMemberIdNumber() != null)
-            employeeToUpdate.PagibigMemberIdNumber = updateEmployee.PagibigMemberIdNumber();
-        if (updateEmployee.EmploymentStatus() != null) {
-            var res = EmploymentStatus.parse(updateEmployee.EmploymentStatus());
-            if (res instanceof Failure<EmploymentStatus>(MotorPhException exception))
-                return Result.failure(exception);
-            var val = ((Success<EmploymentStatus>)res).value();
-            employeeToUpdate.EmploymentStatus = val;
+        var isUpdated = updateEmployee.updateEmployee(employeeToUpdate);
+        if (!isUpdated) {
+            return Result.failure(new MotorPhException("No fields to update"));
         }
 
         var res = employeeRepository.updateEmployee(employeeToUpdate);

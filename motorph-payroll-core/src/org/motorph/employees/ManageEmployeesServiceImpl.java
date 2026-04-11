@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class ManageEmployeesServiceImpl implements ManageEmployeesService {
+public final class ManageEmployeesServiceImpl implements ManageEmployeesService {
     private final EmployeeRepository employeeRepository;
 
     public ManageEmployeesServiceImpl(EmployeeRepository employeeRepository) {

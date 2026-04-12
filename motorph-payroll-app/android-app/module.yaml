@@ -7,3 +7,7 @@ dependencies:
 settings:
   compose: enabled
   junit: junit-4
+  jvm:
+    jdk:
+      version: 25
+      selectionMode: alwaysProvision

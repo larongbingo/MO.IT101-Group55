@@ -3,23 +3,17 @@ product:
   platforms: [ jvm, android ]
 
 test-dependencies:
-  # testImplementation(platform("org.junit:junit-bom:5.10.0"))
   - bom: org.junit:junit-bom:5.10.1
-
-  # testImplementation("org.junit.jupiter:junit-jupiter")
-  - org.junit.jupiter:junit-jupiter:5.10.1
-
-  # testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+  - org.junit.jupiter:junit-jupiter
   - org.junit.platform:junit-platform-launcher:
       scope: runtime-only
-
-  # testImplementation("org.mockito:mockito-core:5.23.0")
   - org.mockito:mockito-core:5.23.0
-
-  # testImplementation("org.mockito:mockito-junit-jupiter:5.23.0")
   - org.mockito:mockito-junit-jupiter:5.23.0
+  - org.junit.jupiter:junit-jupiter-params:5.10.1
 
 settings:
   junit: junit-5
   jvm:
-    release: 21 # Ensure this matches your target JDK
+    jdk:
+      version: 25
+      selectionMode: alwaysProvision

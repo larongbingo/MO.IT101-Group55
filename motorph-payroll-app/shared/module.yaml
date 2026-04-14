@@ -12,6 +12,7 @@ dependencies:
   - androidx.sqlite:sqlite-bundled:2.6.2
   - androidx.lifecycle:lifecycle-viewmodel:2.9.4
   - androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4
+  - at.favre.lib:bcrypt:0.10.2
   - io.insert-koin:koin-core:4.2.1
   - io.insert-koin:koin-compose-viewmodel:4.2.1
 #  - org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.9.0

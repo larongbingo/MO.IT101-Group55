@@ -7,18 +7,21 @@ dependencies:
   - $compose.foundation: exported
   - $compose.material3: exported
   - androidx.room:room-runtime:2.7.0
+  - androidx.room:room-compiler:2.7.0
   - androidx.sqlite:sqlite:2.6.2
   - androidx.sqlite:sqlite-bundled:2.6.2
   - androidx.lifecycle:lifecycle-viewmodel:2.9.4
   - androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4
   - io.insert-koin:koin-core:4.2.1
+  - io.insert-koin:koin-compose-viewmodel:4.2.1
 #  - org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.9.0
 
 settings:
   kotlin:
     ksp:
       processors:
-        - androidx.room:room-runtime:2.7.0
+        - androidx.room:room-compiler:2.7.0
+
   compose:
     enabled: true
   jvm:

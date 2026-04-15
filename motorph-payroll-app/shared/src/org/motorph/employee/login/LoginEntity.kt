@@ -2,6 +2,8 @@ package org.motorph.employee.login
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import org.motorph.employee.EmployeeEntity
 import org.motorph.employees.login.Login
 
@@ -10,17 +12,23 @@ import org.motorph.employees.login.Login
     foreignKeys = [
         ForeignKey(
             entity = EmployeeEntity::class,
-            parentColumns = ["EmployeeId"],
-            childColumns = ["EmployeeId"],
+            parentColumns = ["employeeId"],
+            childColumns = ["employeeId"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE,
         ),
     ],
+    indices = [
+        Index(value = ["employeeId"], unique = false),
+        Index(value = ["username"], unique = true),
+    ]
 )
 data class LoginEntity(
     val employeeId: String,
     val username: String,
-    val password: String
+    val password: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
 ) {
     fun toLogin() = Login(employeeId, username, password)
 

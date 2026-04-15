@@ -12,7 +12,13 @@ class EmployeeRepositoryImpl(private val employeeDao: EmployeeDao) : EmployeeRep
         val employeeEntity = EmployeeEntity.fromEmployee(newEmployee)
         val result = runCatching { runBlocking { employeeDao.insert(employeeEntity) } }
         return result.fold(
-            onSuccess = { Result.success(newEmployee) },
+            onSuccess = {
+                if (it > 0) {
+                    Result.success(newEmployee)
+                } else {
+                    Result.failure<Employee>(MotorPhException("Failed to add employee"))
+                }
+            },
             onFailure = { Result.failure<Employee>(MotorPhException("Failed to add employee", it)) }
         )
     }
@@ -21,7 +27,13 @@ class EmployeeRepositoryImpl(private val employeeDao: EmployeeDao) : EmployeeRep
         val employeeEntity = EmployeeEntity.fromEmployee(updatedEmployee)
         val result = runCatching { runBlocking { employeeDao.update(employeeEntity) } }
         return result.fold(
-            onSuccess = { Result.success(updatedEmployee) },
+            onSuccess = {
+                if (it > 0) {
+                    Result.success(updatedEmployee)
+                } else {
+                    Result.failure<Employee>(MotorPhException("Failed to update employee"))
+                }
+            },
             onFailure = { Result.failure<Employee>(MotorPhException("Failed to update employee", it)) }
         )
     }

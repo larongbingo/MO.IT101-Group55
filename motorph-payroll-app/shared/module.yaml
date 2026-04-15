@@ -13,12 +13,15 @@ dependencies:
   - androidx.lifecycle:lifecycle-viewmodel:2.9.4
   - androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4
   - at.favre.lib:bcrypt:0.10.2
+  - de.brudaswen.kotlinx.serialization:kotlinx-serialization-csv:3.2.1
   - io.insert-koin:koin-core:4.2.1
   - io.insert-koin:koin-compose-viewmodel:4.2.1
 #  - org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.9.0
 
 settings:
   kotlin:
+    serialization:
+      enabled: true
     ksp:
       processors:
         - androidx.room:room-compiler:2.7.0

@@ -20,3 +20,9 @@ School project to MMDC
     - Android App
   - `/shared`
     - Shared Code for `jvm-app` and `android-app
+
+### Note on Amper
+Note that the developer used Amper to check and experiment with the build tool.
+On first run, it may take a while to download the dependencies.
+
+If you encounter any issues, please refer to the Amper documentation for troubleshooting.

@@ -52,6 +52,12 @@ fun LoginScreen(
             value = uiState.username,
             onValueChange = onUsernameChanged,
             label = { Text("Username") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next,
+                autoCorrectEnabled = false
+            ),
             modifier = Modifier
                 .focusRequester(usernameRef)
                 .onPreviewKeyEvent {
@@ -69,7 +75,12 @@ fun LoginScreen(
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.focusRequester(passwordRef),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done,
+                autoCorrectEnabled = false
+            ),
             keyboardActions = KeyboardActions(onDone = { if (!uiState.isLoading) login { } }),
         )
         Spacer(modifier = Modifier.height(16.dp))

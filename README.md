@@ -8,18 +8,12 @@ School project to MMDC
   - `./amper run --module jvm-app --main-class MainKt`
 
 ## Project Structure
-- `/motorph-payroll-console`
-  - Console App
-- `/motorph-payroll-core`
-  - Business Logic and Domain Models
-- `/motorph-payroll-app`
-  - Infrastructure and UI Code for Desktop and Android App
-  - `/jvm-app`
-    - Desktop App
-  - `/android-app`
-    - Android App
-  - `/shared`
-    - Shared Code for `jvm-app` and `android-app
+- `/motorph-payroll-console` - Console App
+- `/motorph-payroll-core` - Business Logic and Domain Models
+- `/motorph-payroll-app` - Infrastructure and UI Code for Desktop and Android App
+  - `/jvm-app` - Desktop App
+  - `/android-app` - Android App
+  - `/shared` - Shared Code for jvm-app and android-app
 
 ### Note on Amper
 Note that the developer used Amper to check and experiment with the build tool.

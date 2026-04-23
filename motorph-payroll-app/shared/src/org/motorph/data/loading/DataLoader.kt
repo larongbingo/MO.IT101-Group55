@@ -46,7 +46,7 @@ class DataLoader(
             when (result) {
                 is Success<Employee> -> result.value
                 is Failure<Employee> -> {
-                    println(result.exception)
+                    println("${result.exception} ${result.exception?.cause}")
                     null
                 }
                 else -> null

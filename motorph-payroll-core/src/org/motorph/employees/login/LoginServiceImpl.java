@@ -43,6 +43,10 @@ public final class LoginServiceImpl implements LoginService {
 
     @Override
     public Result<Employee> login(String username, String password) {
+        if (username.isBlank() || password.isBlank()) {
+            return Result.failure(new MotorPhException("Username/Password cannot be empty"));
+        }
+
         var login = loginRepository.getLoginByUsername(username);
         if (login == null) {
             return Result.failure(new MotorPhException("Invalid Username/Password"));

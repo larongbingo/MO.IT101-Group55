@@ -12,11 +12,14 @@ import org.motorph.employee.EmployeeDao
 import org.motorph.employee.EmployeeEntity
 import org.motorph.employee.login.LoginDao
 import org.motorph.employee.login.LoginEntity
+import org.motorph.timesheets.TimesheetDao
+import org.motorph.timesheets.TimesheetEntity
 
 @Database(
     entities = [
         EmployeeEntity::class,
         LoginEntity::class,
+        TimesheetEntity::class,
     ],
     version = 1,
     exportSchema = false,
@@ -26,6 +29,7 @@ import org.motorph.employee.login.LoginEntity
 abstract class AppDatabase : RoomDatabase() {
     abstract fun employeeDao(): EmployeeDao
     abstract fun loginDao(): LoginDao
+    abstract fun timesheetDao(): TimesheetDao
 }
 
 @Suppress("NO_ACTUAL_FOR_EXPECT", "KotlinNoActualForExpect")

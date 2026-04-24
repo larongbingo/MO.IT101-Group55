@@ -1,5 +1,6 @@
 package org.motorph.repositories;
 
+import org.motorph.core.results.Result;
 import org.motorph.timesheet.Timesheet;
 import org.motorph.timesheet.TimesheetRepository;
 
@@ -13,6 +14,16 @@ public class ListTimesheetRepository implements TimesheetRepository {
 
     public ListTimesheetRepository(List<Timesheet> timesheets) {
         this.timesheets = timesheets;
+    }
+
+    @Override
+    public Result<Timesheet> addTimesheet(Timesheet timesheet) {
+        return null;
+    }
+
+    @Override
+    public Result<Timesheet> updateTimesheet(Timesheet updatedTimesheet) {
+        return null;
     }
 
     /// {@inheritDoc}

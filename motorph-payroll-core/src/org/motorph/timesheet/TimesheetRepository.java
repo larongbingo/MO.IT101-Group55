@@ -1,5 +1,7 @@
 package org.motorph.timesheet;
 
+import org.motorph.core.results.Result;
+
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatterBuilder;
@@ -8,6 +10,9 @@ import java.util.Locale;
 
 /// Common queries for timesheet data
 public interface TimesheetRepository {
+    Result<Timesheet> addTimesheet(Timesheet timesheet);
+    Result<Timesheet> updateTimesheet(Timesheet updatedTimesheet);
+
     /// Fetches all timesheets for an employee within a date range
     List<Timesheet> getAllTimesheetsByEmployeeIdAndDateRange(String employeeId, LocalDateTime startDate, LocalDateTime endDate);
 

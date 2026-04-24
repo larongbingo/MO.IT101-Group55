@@ -1,22 +1,30 @@
 package org.motorph.timesheet;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Timesheet {
+    /**
+     * Console app specific constructor
+     */
     public Timesheet(String employeeId, LocalDateTime startTime, LocalDateTime endTime) {
+        this(employeeId, startTime, endTime, org.motorph.timesheet.AttendanceType.AtWork);
+    }
+
+    /**
+     * ORM specific constructor
+     */
+    public Timesheet(String employeeId, LocalDateTime startTime, LocalDateTime endTime, AttendanceType attendanceType) {
         EmployeeId = employeeId;
         StartTime = startTime;
         EndTime = endTime;
-        AttendanceType = org.motorph.timesheet.AttendanceType.AtWork;
+        AttendanceType = attendanceType;
     }
 
-    @NotNull public final String EmployeeId;
-    @NotNull public final LocalDateTime StartTime;
+    public final String EmployeeId;
+    public final LocalDateTime StartTime;
     public LocalDateTime EndTime;
-    @NotNull public final AttendanceType AttendanceType;
+    public final AttendanceType AttendanceType;
 
     public double getTotalHours() {
         return Duration.between(StartTime, EndTime).toHours();

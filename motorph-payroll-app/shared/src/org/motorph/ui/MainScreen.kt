@@ -9,11 +9,12 @@ import androidx.lifecycle.ViewModel
 import org.motorph.employees.Employee
 import org.motorph.ui.mainscreen.NextPayrollCard
 import org.motorph.ui.mainscreen.PayrollBarGraph
+import java.time.LocalDate
 
 @Composable
 fun MainScreen() {
     Column(Modifier.padding(8.dp)) {
-        NextPayrollCard()
+        NextPayrollCard(LocalDate.now().plusDays(20))
 
         PayrollBarGraph()
     }

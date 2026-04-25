@@ -22,9 +22,14 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
-fun NextPayrollCard() {
+fun NextPayrollCard(nextPayrollDate: LocalDate) {
+    val currentDate = LocalDate.now()
+    val daysRemaining = nextPayrollDate.toEpochDay() - currentDate.toEpochDay()
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -33,7 +38,7 @@ fun NextPayrollCard() {
         backgroundColor = Color(0xFF173FBB),
         elevation = 0.dp
     ) {
-        Column(modifier = Modifier.padding(30.dp)) {
+        Column(modifier = Modifier.padding(18.dp)) {
             Text(
                 text = "NEXT PAY DAY",
                 color = Color.White.copy(alpha = 0.72f),
@@ -46,7 +51,7 @@ fun NextPayrollCard() {
 
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    text = "04",
+                    text = daysRemaining.toString().padStart(2, '0'),
                     color = Color.White,
                     fontSize = 46.sp,
                     fontWeight = FontWeight.Bold,
@@ -64,7 +69,7 @@ fun NextPayrollCard() {
                 )
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(18.dp))
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -83,7 +88,7 @@ fun NextPayrollCard() {
                         colorFilter = ColorFilter.tint(Color.White.copy(alpha = 0.85f))
                     )
 
-                    Spacer(modifier = Modifier.width(18.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
 
                     Column {
                         Text(
@@ -97,7 +102,7 @@ fun NextPayrollCard() {
                         Spacer(Modifier.height(3.dp))
 
                         Text(
-                            text = "Friday, Oct 27, 2023",
+                            text = nextPayrollDate.format(DateTimeFormatter.ofPattern("EEEE, MMM d, yyyy")),
                             color = Color.White,
                             fontSize = 17.sp,
                             fontWeight = FontWeight.Bold

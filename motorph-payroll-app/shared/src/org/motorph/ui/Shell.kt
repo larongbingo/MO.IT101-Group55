@@ -27,7 +27,7 @@ enum class Destination(
 }
 
 @Composable
-fun MainShell() {
+fun Shell() {
     val navController = rememberNavController()
     val startDestination = Destination.HOME
     var selectedDestination by rememberSaveable { mutableStateOf(startDestination.ordinal) }
